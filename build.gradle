@@ -1,14 +1,14 @@
 plugins {
-	id 'fabric-loom' version '0.12-SNAPSHOT'
+	id 'org.quiltmc.loom' version '1.0'
 	id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
 archivesBaseName = project.archives_base_name
-version = project.mod_version
+version = project.version
 group = project.maven_group
+
+// This field defines the Java version your mod target.
+def targetJavaVersion = 17
 
 repositories {
 	maven {
@@ -42,11 +42,9 @@ dependencies {
 	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
+	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
+	modImplementation("org.quiltmc.quilted-fabric-api:quilted-fabric-api:${project.fabric_api_version}-${minecraft_version}")
+	
 	modImplementation "com.github.apace100:apoli:${project.apoli_version}"
 	include "com.github.apace100:apoli:${project.apoli_version}"
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${cca_version}"
@@ -64,7 +62,7 @@ dependencies {
 processResources {
 	inputs.property "version", project.version
 
-	filesMatching("fabric.mod.json") {
+	filesMatching("quilt.mod.json") {
 		expand "version": project.version
 	}
 }
